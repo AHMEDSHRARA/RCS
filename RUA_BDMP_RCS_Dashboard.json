@@ -41,7 +41,6 @@
   --font-body:'Inter','Segoe UI',system-ui,-apple-system,sans-serif;
   --font-mono:'IBM Plex Mono','SF Mono',Consolas,monospace;
 
-  /* ---- semantic surface tokens (theme-aware) ---- */
   --bg: var(--paper);
   --surface: #ffffff;
   --surface-2: var(--paper-dim);
@@ -185,6 +184,7 @@ html[data-theme="dark"] .theme-toggle .icon-moon{display:block;}
   background:var(--navy-900);
   padding:10px 28px;
   border-bottom:1px solid var(--navy-700);
+  flex-wrap:wrap;
 }
 .round-selector-lbl{
   font-size:10.5px;
@@ -257,8 +257,9 @@ html[data-theme="dark"] .theme-toggle .icon-moon{display:block;}
 }
 .kpi .sub{font-size:11.5px;color:var(--ink-soft);margin-top:3px;}
 
-/* ============ MILESTONE RATING CARDS ============ */
+/* ============ RATING CARDS (Stage / Milestone) ============ */
 #milestoneRatingRow{grid-template-columns:repeat(4,1fr);}
+#stageRatingRow{grid-template-columns:repeat(4,1fr);gap:14px;display:grid;}
 .rating-card{
   background:var(--surface);
   border:1px solid var(--line);
@@ -337,6 +338,59 @@ html[data-theme="dark"] .theme-toggle .icon-moon{display:block;}
 .controls-row .grp{display:flex;align-items:center;gap:6px;}
 .controls-row input[type=text]{min-width:200px;}
 
+/* ============ MULTI-SELECT DROPDOWN ============ */
+.multiselect{position:relative;}
+.ms-toggle{
+  font-family:var(--font-body);
+  font-size:12px;
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  padding:7px 30px 7px 10px;
+  background:var(--surface);
+  color:var(--ink);
+  min-width:160px;
+  text-align:left;
+  position:relative;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.ms-toggle::after{
+  content:'▾';
+  position:absolute;
+  right:10px;
+  top:50%;
+  transform:translateY(-50%);
+  color:var(--ink-soft);
+  font-size:10px;
+}
+.ms-toggle:hover{border-color:var(--navy-600);}
+.ms-toggle.has-selection{border-color:var(--navy-700);color:var(--navy-800);font-weight:600;}
+html[data-theme="dark"] .ms-toggle.has-selection{color:var(--gold-400);}
+.ms-panel{
+  position:absolute;
+  top:calc(100% + 4px);
+  left:0;
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  box-shadow:0 6px 18px rgba(13,26,48,0.18);
+  min-width:240px;
+  max-height:300px;
+  overflow-y:auto;
+  z-index:40;
+  display:none;
+  padding:8px;
+}
+.ms-panel.open{display:block;}
+.ms-actions{display:flex;gap:12px;padding-bottom:6px;margin-bottom:6px;border-bottom:1px solid var(--line);}
+.ms-actions button{background:transparent;border:none;color:var(--navy-700);font-size:11px;font-weight:700;text-decoration:underline;padding:2px 0;text-transform:uppercase;letter-spacing:0.03em;}
+html[data-theme="dark"] .ms-actions button{color:var(--gold-400);}
+.ms-actions button:hover{opacity:0.75;}
+.ms-option{display:flex;align-items:center;gap:8px;padding:6px 6px;font-size:12.5px;border-radius:2px;cursor:pointer;user-select:none;}
+.ms-option:hover{background:var(--paper-dim);}
+.ms-option input{cursor:pointer;flex-shrink:0;}
+
 /* ============ TABLE ============ */
 .table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:var(--radius);}
 table.rcs-table{font-size:12.5px;}
@@ -385,6 +439,24 @@ table.rcs-table tbody tr.row-total td{border-top:1px solid var(--line);}
 }
 .crit-badge.has-crit{color:var(--sev-critical);}
 
+/* ============ HEATMAP ============ */
+table.heatmap-table{font-size:12px;}
+table.heatmap-table thead th{
+  background:var(--navy-800); color:#fff; padding:9px 10px; font-size:10.5px;
+  text-transform:uppercase; letter-spacing:0.04em; text-align:center; white-space:nowrap;
+}
+table.heatmap-table thead th:first-child{ text-align:left; position:sticky; left:0; z-index:2; }
+table.heatmap-table tbody td{ padding:0; border-bottom:1px solid var(--paper-dim); text-align:center; }
+table.heatmap-table tbody td.hm-disc{
+  text-align:left; padding:8px 12px; white-space:nowrap; font-size:11.5px;
+  background:var(--surface); position:sticky; left:0; border-right:1px solid var(--line);
+}
+table.heatmap-table tbody tr:hover td.hm-disc{background:var(--paper-dim);}
+.hm-cell{
+  display:flex; align-items:center; justify-content:center;
+  height:38px; font-weight:700; font-size:11px; cursor:default;
+}
+
 /* ============ EMPTY STATE ============ */
 .empty-state{
   min-height:70vh;
@@ -409,7 +481,7 @@ table.rcs-table tbody tr.row-total td{border-top:1px solid var(--line);}
   color:var(--text);
   margin-bottom:8px;
 }
-.empty-state p{color:var(--ink-soft);font-size:13.5px;max-width:420px;margin-bottom:22px;}
+.empty-state p{color:var(--ink-soft);font-size:13.5px;max-width:460px;margin-bottom:22px;}
 .empty-state .btn-upload{padding:12px 26px;font-size:13px;}
 .empty-state .hint{font-size:11px;color:var(--ink-soft);margin-top:14px;font-family:var(--font-mono);}
 .drop-zone.dragover{outline:2px dashed var(--gold-500);outline-offset:8px;border-radius:8px;}
@@ -422,7 +494,7 @@ table.rcs-table tbody tr.row-total td{border-top:1px solid var(--line);}
 /* responsive */
 @media (max-width:1100px){
   .kpi-row{grid-template-columns:repeat(2,1fr);}
-  #milestoneRatingRow{grid-template-columns:repeat(2,1fr);}
+  #milestoneRatingRow, #stageRatingRow{grid-template-columns:repeat(2,1fr);}
   .grid-2,.grid-3{grid-template-columns:1fr;}
 }
 
@@ -458,8 +530,7 @@ button:focus-visible, select:focus-visible, input:focus-visible, th:focus-visibl
 
 <div class="viewnav" id="viewnav" style="display:none;">
   <button class="active" data-view="overview">Overview</button>
-  <button data-view="detail">Workstream Detail</button>
-  <button data-view="register">Comment Register</button>
+  <button data-view="detail">Discipline &amp; Milestone Detail</button>
   <button data-view="rounds">Rounds Comparison</button>
 </div>
 
@@ -468,7 +539,8 @@ button:focus-visible, select:focus-visible, input:focus-visible, th:focus-visibl
   <button class="round-pill active" data-round="R1">R1</button>
   <button class="round-pill" data-round="R2">R2</button>
   <button class="round-pill" data-round="R3">R3</button>
-  <span class="round-selector-hint">Applies to Overview and Workstream Detail below</span>
+  <button class="round-pill" data-round="Final">Final</button>
+  <span class="round-selector-hint">Applies to Overview and Discipline &amp; Milestone Detail below</span>
 </div>
 
 <!-- EMPTY STATE -->
@@ -478,22 +550,25 @@ button:focus-visible, select:focus-visible, input:focus-visible, th:focus-visibl
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
     </div>
     <h2>Load a Review &amp; Comment Sheet</h2>
-    <p>Drop an RCS workbook here, or use the upload button above. The dashboard reads every workstream tab directly — across R1, R2, and R3 — and every chart and table below refreshes automatically each time a new file is loaded.</p>
+    <p>Drop an RCS workbook here, or use the upload button above. The dashboard reads the consolidated <b>RCS tab</b> directly — its R1, R2, R3, and Final review-summary blocks — rather than the 23 individual workstream tabs, so it stays in sync with the workbook's own computed ratings and statuses.</p>
     <button class="btn-upload" id="btnUploadCenter">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
       Choose File
     </button>
-    <div class="hint" id="emptyHint">Expected format: RUA BDMP RCS workbook with per-discipline workstream tabs (Stage / Milestone / R1–R3 Status / Critical columns)</div>
+    <div class="hint" id="emptyHint">Expected format: RUA BDMP RCS workbook with an "RCS" tab containing R1/R2/R3/Final review-summary blocks</div>
   </div>
 </div>
 
 <!-- OVERVIEW -->
 <div id="view-overview" class="view">
-  <div class="section-label">Programme KPIs — R1 Review Summary</div>
+  <div class="section-label">Programme KPIs</div>
   <div class="kpi-row" id="kpiRow"></div>
 
-  <div class="section-label">Overall Rating by Milestone — Baseline Stage</div>
-  <div class="panel-sub" style="margin:-6px 0 14px;">Based on (A + B) share of total comments per milestone: ≥90% Approved · 75–89% Approved with Comments · 50–74% Revise &amp; Resubmit · &lt;50% Rejected</div>
+  <div class="section-label">Approval Status by Stage</div>
+  <div class="kpi-row" id="stageRatingRow"></div>
+
+  <div class="section-label">Approval Status by Milestone — Baseline Stage</div>
+  <div class="panel-sub" style="margin:-6px 0 14px;">Based on (A + B) share of total comments per milestone, taken directly from the RCS tab's own computed Rating/Status columns: ≥90% Approved · 75–89% Approved with Comments · 50–74% Revise &amp; Resubmit · &lt;50% Rejected</div>
   <div class="kpi-row" id="milestoneRatingRow"></div>
 
   <div class="section-label">Approval Progression by Milestone</div>
@@ -514,35 +589,21 @@ button:focus-visible, select:focus-visible, input:focus-visible, th:focus-visibl
   <div class="grid-2">
     <div class="panel">
       <h3>Open comment severity</h3>
-      <div class="panel-sub">High / Medium / Low across all disciplines — Critical items tracked separately above</div>
+      <div class="panel-sub">High / Medium / Low across all disciplines</div>
       <div class="chart-wrap h280"><canvas id="chartSeverityPie"></canvas></div>
     </div>
     <div class="panel">
-      <h3>Disciplines by status</h3>
-      <div class="panel-sub">How many disciplines currently sit at each disposition (TOTAL rows)</div>
+      <h3>Workstreams by status</h3>
+      <div class="panel-sub">How many workstreams currently sit at each disposition (TOTAL rows)</div>
       <div class="chart-wrap h280"><canvas id="chartRatingHist"></canvas></div>
     </div>
   </div>
-</div>
 
-<!-- DETAIL -->
-<div id="view-detail" class="view">
-  <div class="section-label">Workstream Comparison</div>
-  <div class="controls-row">
-    <div class="grp">
-      <label>Sort by</label>
-      <select id="sortDetail">
-        <option value="total-desc">Total comments (high→low)</option>
-        <option value="critical-desc">Critical items (high→low)</option>
-        <option value="rating-asc">R1 rating (low→high)</option>
-        <option value="alpha">Discipline (A→Z)</option>
-      </select>
-    </div>
-  </div>
+  <div class="section-label">Approval Status by Workstream</div>
   <div class="panel">
-    <h3>Disposition by discipline — TOTAL across all steps</h3>
-    <div class="panel-sub">Every reviewed discipline, stacked by status code</div>
-    <div class="chart-wrap" style="height:520px;"><canvas id="chartDisciplineStacked"></canvas></div>
+    <h3>Disposition by workstream — TOTAL across all steps</h3>
+    <div class="panel-sub">Every workstream, stacked by status code, for the selected round</div>
+    <div class="chart-wrap" style="height:560px;"><canvas id="chartDisciplineStacked"></canvas></div>
     <div class="legend-row">
       <span><i class="dot" style="background:var(--status-a)"></i>A — Approved</span>
       <span><i class="dot" style="background:var(--status-b)"></i>B — Approved w/ Comments</span>
@@ -550,48 +611,41 @@ button:focus-visible, select:focus-visible, input:focus-visible, th:focus-visibl
       <span><i class="dot" style="background:var(--status-d)"></i>D — Rejected</span>
     </div>
   </div>
-
-  <div class="section-label">Critical Exposure by Discipline</div>
-  <div class="panel">
-    <h3>Critical-severity open comments</h3>
-    <div class="panel-sub">Disciplines with zero critical comments are omitted</div>
-    <div class="chart-wrap" style="height:320px;"><canvas id="chartCriticalBar"></canvas></div>
-  </div>
-
-  <div class="section-label">Step-by-Step Breakdown</div>
-  <div class="panel">
-    <h3>Comment volume by milestone step, per discipline</h3>
-    <div class="panel-sub">Step I through Step IV — Baseline stage</div>
-    <div class="chart-wrap" style="height:380px;"><canvas id="chartStepGrouped"></canvas></div>
-  </div>
-
-  <div class="panel" style="margin-top:16px;">
-    <h3>Comment volume matrix</h3>
-    <div class="panel-sub">Total comments and disposition status per discipline × milestone step · hover a total cell for the A/B/C/D breakdown</div>
-    <div class="table-wrap">
-      <table class="rcs-table" id="stepMatrixTable">
-        <thead><tr id="stepMatrixHead"></tr></thead>
-        <tbody id="stepMatrixBody"></tbody>
-      </table>
-    </div>
-  </div>
 </div>
 
-<!-- REGISTER -->
-<div id="view-register" class="view">
-  <div class="section-label">Comment Register — All Rows</div>
+<!-- DETAIL -->
+<div id="view-detail" class="view">
+  <div class="section-label">Discipline × Milestone Detail</div>
   <div class="controls-row">
     <div class="grp">
       <label>Discipline</label>
-      <select id="filterDiscipline"><option value="">All</option></select>
+      <div class="multiselect" id="msDiscipline">
+        <button type="button" class="ms-toggle" id="msDisciplineToggle">All Disciplines</button>
+        <div class="ms-panel" id="msDisciplinePanel">
+          <div class="ms-actions">
+            <button type="button" data-ms="msDiscipline" data-action="all">Select All</button>
+            <button type="button" data-ms="msDiscipline" data-action="none">Clear</button>
+          </div>
+          <div class="ms-options" id="msDisciplineOptions"></div>
+        </div>
+      </div>
+    </div>
+    <div class="grp">
+      <label>Milestone</label>
+      <div class="multiselect" id="msMilestone">
+        <button type="button" class="ms-toggle" id="msMilestoneToggle">All Milestones</button>
+        <div class="ms-panel" id="msMilestonePanel">
+          <div class="ms-actions">
+            <button type="button" data-ms="msMilestone" data-action="all">Select All</button>
+            <button type="button" data-ms="msMilestone" data-action="none">Clear</button>
+          </div>
+          <div class="ms-options" id="msMilestoneOptions"></div>
+        </div>
+      </div>
     </div>
     <div class="grp">
       <label>Status</label>
       <select id="filterStatus"><option value="">All</option></select>
-    </div>
-    <div class="grp">
-      <label>Milestone</label>
-      <select id="filterMilestone"><option value="">All</option></select>
     </div>
     <div class="grp">
       <label>Search</label>
@@ -604,24 +658,77 @@ button:focus-visible, select:focus-visible, input:focus-visible, th:focus-visibl
       <tbody id="tableBody"></tbody>
     </table>
   </div>
+
+  <div class="section-label">Approval Heatmap — Workstream × Milestone</div>
+  <div class="panel">
+    <h3>Rating by workstream and step</h3>
+    <div class="panel-sub">Cell shading follows the same A/B/C/D disposition colors as the rest of the dashboard · hover a cell for the exact percentage</div>
+    <div class="table-wrap">
+      <table class="heatmap-table" id="heatmapTable">
+        <thead><tr id="heatmapHead"></tr></thead>
+        <tbody id="heatmapBody"></tbody>
+      </table>
+    </div>
+  </div>
 </div>
 
 <!-- ROUNDS COMPARISON -->
 <div id="view-rounds" class="view">
+  <div class="section-label">Filter Scope</div>
+  <div class="controls-row">
+    <div class="grp">
+      <label>Discipline</label>
+      <div class="multiselect" id="msRoundsDiscipline">
+        <button type="button" class="ms-toggle" id="msRoundsDisciplineToggle">All Disciplines</button>
+        <div class="ms-panel" id="msRoundsDisciplinePanel">
+          <div class="ms-actions">
+            <button type="button" data-ms="msRoundsDiscipline" data-action="all">Select All</button>
+            <button type="button" data-ms="msRoundsDiscipline" data-action="none">Clear</button>
+          </div>
+          <div class="ms-options" id="msRoundsDisciplineOptions"></div>
+        </div>
+      </div>
+    </div>
+    <div class="grp">
+      <label>Milestone</label>
+      <div class="multiselect" id="msRoundsMilestone">
+        <button type="button" class="ms-toggle" id="msRoundsMilestoneToggle">All Milestones</button>
+        <div class="ms-panel" id="msRoundsMilestonePanel">
+          <div class="ms-actions">
+            <button type="button" data-ms="msRoundsMilestone" data-action="all">Select All</button>
+            <button type="button" data-ms="msRoundsMilestone" data-action="none">Clear</button>
+          </div>
+          <div class="ms-options" id="msRoundsMilestoneOptions"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="panel-sub" style="margin:-4px 0 4px;">KPIs, charts, and the workstream table below all recompute for whatever's selected here — leave both on "All" for the full programme view.</div>
+
   <div class="section-label">Round-over-Round Performance</div>
   <div class="kpi-row" id="roundsKpiRow"></div>
 
   <div class="section-label">Disposition by Round</div>
   <div class="panel">
-    <h3>A / B / C / D counts — R1 vs R2 vs R3</h3>
-    <div class="panel-sub">Programme-wide totals across all disciplines and steps. R2/R3 bars stay at zero until comments are reviewed in those rounds.</div>
+    <h3>A / B / C / D counts — R1 vs R2 vs R3 vs Final</h3>
+    <div class="panel-sub">Programme-wide totals, taken directly from each round's grand-total row in the RCS tab</div>
     <div class="chart-wrap" style="height:320px;"><canvas id="chartRoundsCompare"></canvas></div>
   </div>
 
-  <div class="section-label">Per-Discipline Round Status</div>
+  <div class="section-label">Critical Open Comments by Round</div>
+  <div class="kpi-row" id="criticalKpiRow"></div>
+
+  <div class="section-label">Critical Severity by Round</div>
   <div class="panel">
-    <h3>Comment volume reviewed, by discipline and round</h3>
-    <div class="panel-sub">Total comments with a disposition entered in each round · helps spot which disciplines have started R2/R3 review</div>
+    <h3>High / Medium / Low — R1 vs R2 vs R3 vs Final</h3>
+    <div class="panel-sub">Are severity-tagged issues actually closing out round to round, or persisting to Final?</div>
+    <div class="chart-wrap" style="height:280px;"><canvas id="chartSeverityByRound"></canvas></div>
+  </div>
+
+  <div class="section-label">Per-Workstream Round Status</div>
+  <div class="panel">
+    <h3>Rating and status, by workstream and round</h3>
+    <div class="panel-sub">Every workstream's TOTAL-row disposition across all four rounds</div>
     <div class="table-wrap">
       <table class="rcs-table" id="roundsMatrixTable">
         <thead><tr id="roundsMatrixHead"></tr></thead>
@@ -635,20 +742,90 @@ button:focus-visible, select:focus-visible, input:focus-visible, th:focus-visibl
 
 <script>
 /* ===================== STATE ===================== */
-let RAW_ROWS = [];      // all parsed rows incl. TOTAL rows
-let CHARTS = {};        // chart.js instances keyed by canvas id
+let CHARTS = {};
 if(window.ChartDataLabels){
   Chart.register(ChartDataLabels);
   Chart.defaults.plugins.datalabels = Chart.defaults.plugins.datalabels || {};
   Chart.defaults.plugins.datalabels.display = false;
 }
 let SORT_STATE = { col:null, dir:1 };
+/* Multi-select filter state — empty Set means "All" (no filtering). One pair for the Detail page,
+   one pair for the Rounds Comparison page, kept independent so each view remembers its own selection. */
+const MS_STATE = { msDiscipline: new Set(), msMilestone: new Set(), msRoundsDiscipline: new Set(), msRoundsMilestone: new Set() };
+const MS_ONCHANGE = {};
+const MS_ALLLABEL = {};
+
+function buildMultiSelect(msId, values, allLabel, onChange){
+  MS_ONCHANGE[msId] = onChange;
+  MS_ALLLABEL[msId] = allLabel;
+  const optionsEl = document.getElementById(msId+'Options');
+  const selected = MS_STATE[msId];
+  // drop any previously-selected values that no longer exist in the current option list
+  [...selected].forEach(v=>{ if(!values.includes(v)) selected.delete(v); });
+
+  optionsEl.innerHTML = values.map(v=>{
+    const checked = selected.has(v) ? 'checked' : '';
+    return `<label class="ms-option"><input type="checkbox" value="${escAttr(v)}" ${checked}> ${escHtml(v)}</label>`;
+  }).join('');
+
+  optionsEl.querySelectorAll('input[type=checkbox]').forEach(cb=>{
+    cb.addEventListener('change', ()=>{
+      if(cb.checked) selected.add(cb.value); else selected.delete(cb.value);
+      updateMsToggleLabel(msId, allLabel);
+      if(MS_ONCHANGE[msId]) MS_ONCHANGE[msId]();
+    });
+  });
+  updateMsToggleLabel(msId, allLabel);
+}
+function updateMsToggleLabel(msId, allLabel){
+  const toggleEl = document.getElementById(msId+'Toggle');
+  const selected = MS_STATE[msId];
+  if(selected.size===0){
+    toggleEl.textContent = allLabel;
+    toggleEl.classList.remove('has-selection');
+  }else if(selected.size===1){
+    toggleEl.textContent = shortenLabel([...selected][0]);
+    toggleEl.classList.add('has-selection');
+  }else{
+    toggleEl.textContent = `${selected.size} selected`;
+    toggleEl.classList.add('has-selection');
+  }
+}
+function closeAllMsPanels(except){
+  document.querySelectorAll('.ms-panel.open').forEach(p=>{ if(p.id!==except) p.classList.remove('open'); });
+}
+document.querySelectorAll('.ms-toggle').forEach(btn=>{
+  btn.addEventListener('click', (e)=>{
+    e.stopPropagation();
+    const panel = btn.nextElementSibling;
+    const willOpen = !panel.classList.contains('open');
+    closeAllMsPanels(willOpen ? panel.id : null);
+    panel.classList.toggle('open', willOpen);
+  });
+});
+document.querySelectorAll('.ms-actions button').forEach(btn=>{
+  btn.addEventListener('click', (e)=>{
+    e.stopPropagation();
+    const msId = btn.dataset.ms;
+    const action = btn.dataset.action;
+    const optionsEl = document.getElementById(msId+'Options');
+    const checkboxes = optionsEl.querySelectorAll('input[type=checkbox]');
+    const selected = MS_STATE[msId];
+    checkboxes.forEach(cb=>{
+      cb.checked = (action==='all');
+      if(action==='all') selected.add(cb.value); else selected.delete(cb.value);
+    });
+    updateMsToggleLabel(msId, MS_ALLLABEL[msId] || 'All');
+    if(MS_ONCHANGE[msId]) MS_ONCHANGE[msId]();
+  });
+});
+document.addEventListener('click', ()=> closeAllMsPanels(null));
 
 /* ===================== THEME ===================== */
 function themeVar(name){ return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
 function isDarkMode(){ return document.documentElement.getAttribute('data-theme') === 'dark'; }
 function safeGetStoredTheme(){ try{ return localStorage.getItem('rcs-dashboard-theme'); }catch(e){ return null; } }
-function safeSetStoredTheme(mode){ try{ localStorage.setItem('rcs-dashboard-theme', mode); }catch(e){ /* storage unavailable — theme just won't persist across reloads */ } }
+function safeSetStoredTheme(mode){ try{ localStorage.setItem('rcs-dashboard-theme', mode); }catch(e){ /* storage unavailable */ } }
 function applyChartJsThemeDefaults(){
   const textSoft = themeVar('--text-soft') || '#5b6478';
   const surface = themeVar('--surface') || '#ffffff';
@@ -661,12 +838,11 @@ function setTheme(mode){
   safeSetStoredTheme(mode);
   document.getElementById('themeToggle').setAttribute('aria-pressed', mode==='dark' ? 'true' : 'false');
   applyChartJsThemeDefaults();
-  // re-render charts in place so grid lines / pie borders / tick colors pick up the new theme
-  if(ROWS_BY_ROUND){
+  if(RCS_DATA){
     destroyCharts();
     renderOverviewCharts();
-    renderDetailCharts();
     renderRoundsCompareTab();
+    renderHeatmap();
   }
 }
 (function initTheme(){
@@ -691,7 +867,6 @@ const STATUS_HEX = {
   'Rejected':'#FF0000',
   'No Data':'#a8a39a'
 };
-/* Text color used on top of each status chip/badge — light fills (B/C/Approved-green-is-ok) need dark text for legibility */
 const STATUS_TEXT = {
   'Approved':'#1a2233',
   'Approved with Comments':'#1a2233',
@@ -699,122 +874,150 @@ const STATUS_TEXT = {
   'Rejected':'#ffffff',
   'No Data':'#1a2233'
 };
-
-/* ===================== PARSE ===================== */
 function colorForStatus(s){ return STATUS_HEX[s] || '#a8a39a'; }
 function textColorForStatus(s){ return STATUS_TEXT[s] || '#1a2233'; }
+function ratingFromPct(pct){
+  if(pct >= 90) return {label:'Approved', code:'A'};
+  if(pct >= 75) return {label:'Approved with Comments', code:'B'};
+  if(pct >= 50) return {label:'Revise & Resubmit', code:'C'};
+  return {label:'Rejected', code:'D'};
+}
+/* The RCS tab's own Status formula only checks whether Total Comments (all logged, not this-round-reviewed)
+   is zero — so a round nobody has touched yet still shows "Rejected" rather than "No Data". These helpers
+   correct that at display time: whenever nothing has a disposition entered for this round, treat it as
+   genuinely "No Data" instead of trusting the workbook's literal (misleading) text. */
+function reviewedCount(row){ return row.a + row.b + row.c + row.d; }
+function effectiveStatus(row){ return reviewedCount(row)===0 ? 'No Data' : row.status; }
+function effectiveRating(row){ return reviewedCount(row)===0 ? null : row.rating; }
 
-/* Column map (0-indexed) for each workstream tab — fixed across all 23 discipline tabs */
-const WS_COLS = {
-  stage: 1, milestone: 2,
-  R1: {status: 8, critical: 9},
-  R2: {status: 15, critical: 16},
-  R3: {status: 22, critical: 23}
+/* ===================== PARSE — reads the RCS tab's own 4 review-summary blocks directly ===================== */
+const ROUNDS = ['R1','R2','R3','Final'];
+/* 0-indexed column map for each round's block in the RCS tab (Pending column intentionally skipped — not surfaced in this dashboard) */
+const RCS_BLOCKS = {
+  R1:    { disc:0,  stage:1,  milestone:2,  total:3,  a:4,  b:5,  c:6,  d:7,  rating:9,  status:10, critTotal:11, high:12, medium:13, low:14 },
+  R2:    { disc:16, stage:17, milestone:18, total:19, a:20, b:21, c:22, d:23, rating:25, status:26, critTotal:27, high:28, medium:29, low:30 },
+  R3:    { disc:32, stage:33, milestone:34, total:35, a:36, b:37, c:38, d:39, rating:41, status:42, critTotal:43, high:44, medium:45, low:46 },
+  Final: { disc:48, stage:49, milestone:50, total:51, a:52, b:53, c:54, d:55, rating:57, status:58, critTotal:59, high:60, medium:61, low:62 }
 };
-const NON_DISCIPLINE_SHEETS = new Set(['RCS','DATA LIST','BLANK']);
+const DETAIL_ROW_START = 16;   // row 17 — first discipline/Step I row
+const DETAIL_ROW_END   = 130;  // row 131 — last discipline/TOTAL row (23 disciplines x 5 rows)
+const SUMMARY_ROW_START = 133; // row 134 — Baseline Step I rollup
+const SUMMARY_ROW_END   = 137; // row 138 — Baseline TOTAL rollup
 
-function emptyBucket(){ return {count:0, a:0,b:0,c:0,d:0,high:0,medium:0,low:0}; }
+function numOr0(v){ const n = Number(v); return isFinite(n) ? n : 0; }
 
-function classifySeverity(bucket, sevText){
-  if(sevText === 'High') bucket.high++;
-  else if(sevText === 'Medium') bucket.medium++;
-  else if(sevText === 'Low') bucket.low++;
-}
-function classifyStatus(bucket, statusText){
-  const s = (statusText||'').trim().toUpperCase();
-  if(s==='A') bucket.a++;
-  else if(s==='B') bucket.b++;
-  else if(s==='C') bucket.c++;
-  else if(s==='D') bucket.d++;
-}
+function parseRCS(workbook){
+  const ws = workbook.Sheets['RCS'];
+  if(!ws) throw new Error('This workbook does not contain an "RCS" tab.');
+  const all = XLSX.utils.sheet_to_json(ws, {header:1, defval:null});
 
-function statusLabelFromCounts(bucket){
-  if(bucket.count===0) return 'No Data';
-  // Mirrors the workbook's own formula exactly: AN = (A+B)/Total, AO = IF(AN>=.9,"Approved", IF(AN>=.75,"Approved with Comments", IF(AN>=.5,"Revise & Resubmit","Rejected")))
-  const pct = (bucket.a+bucket.b)/bucket.count;
-  if(pct >= 0.9) return 'Approved';
-  if(pct >= 0.75) return 'Approved with Comments';
-  if(pct >= 0.5) return 'Revise & Resubmit';
-  return 'Rejected';
-}
+  const detailByRound = {R1:[], R2:[], R3:[], Final:[]};
+  const summaryByRound = {R1:[], R2:[], R3:[], Final:[]}; // Step I..IV + TOTAL rollup across all workstreams
 
-/* Parses every discipline (workstream) tab row-by-row and aggregates by discipline × milestone × round.
-   This is the single source of truth for R1, R2, and R3 — replacing the old RCS-tab-only read so all
-   three rounds are computed identically and stay consistent with each other. */
-function parseWorkstreamRounds(workbook){
-  const discSheets = workbook.SheetNames.filter(n => !NON_DISCIPLINE_SHEETS.has(n.trim().toUpperCase()) && !n.trim().toUpperCase().startsWith('DATA LIST'));
-  if(discSheets.length === 0) throw new Error('No workstream/discipline tabs were found in this workbook.');
+  ROUNDS.forEach(rnd=>{
+    const cols = RCS_BLOCKS[rnd];
 
-  const stepOrder = ['Step I','Step II','Step III','Step IV'];
-  const rowsByRound = {R1:[], R2:[], R3:[]};
-  let anyRowsParsed = false;
-
-  discSheets.forEach(sheetName=>{
-    const ws = workbook.Sheets[sheetName];
-    if(!ws) return;
-    const all = XLSX.utils.sheet_to_json(ws, {header:1, defval:null});
-    // buckets[round][milestone] = {a,b,c,d,high,medium,low}
-    const buckets = {R1:{}, R2:{}, R3:{}};
-    stepOrder.forEach(step=>{ ['R1','R2','R3'].forEach(rnd=> buckets[rnd][step] = emptyBucket()); });
-
-    for(let i=0;i<all.length;i++){
+    for(let i=DETAIL_ROW_START; i<=DETAIL_ROW_END; i++){
       const r = all[i];
       if(!r) continue;
-      const milestone = r[WS_COLS.milestone];
-      if(milestone === null || milestone === undefined) continue; // the real-data-row rule: Milestone must be populated
-      const milestoneStr = String(milestone).trim();
-      if(!stepOrder.includes(milestoneStr)) continue; // skip stray header-like or out-of-range rows
-      anyRowsParsed = true;
-      ['R1','R2','R3'].forEach(rnd=>{
-        const bucket = buckets[rnd][milestoneStr];
-        const statusVal = r[WS_COLS[rnd].status];
-        const critVal = r[WS_COLS[rnd].critical];
-        const hasStatus = statusVal !== null && statusVal !== undefined && String(statusVal).trim() !== '';
-        // R1 Total mirrors the workbook's own COUNTIFS(Stage,Milestone) — every logged comment counts, reviewed or not.
-        // R2/R3 Total tracks comments actually reviewed in that round (a status has been entered), since most rows
-        // won't have reached R2/R3 yet and a raw "every comment exists" count would be misleading for those rounds.
-        if(rnd==='R1' || hasStatus) bucket.count++;
-        if(hasStatus) classifyStatus(bucket, statusVal);
-        if(critVal !== null && critVal !== undefined && String(critVal).trim() !== ''){
-          classifySeverity(bucket, critVal);
-        }
+      const disc = r[cols.disc];
+      if(disc===null || disc===undefined || String(disc).trim()==='') continue;
+      const stageRaw = String(r[cols.stage] ?? '').trim();
+      const isTotal = stageRaw.toUpperCase()==='TOTAL';
+      const milestoneRaw = r[cols.milestone];
+      detailByRound[rnd].push({
+        discipline: String(disc).trim(),
+        stage: isTotal ? 'Baseline' : stageRaw,   // TOTAL rows still belong to the Baseline stage conceptually
+        milestone: isTotal ? 'TOTAL' : String(milestoneRaw ?? '').trim(),
+        total: numOr0(r[cols.total]),
+        a: numOr0(r[cols.a]), b: numOr0(r[cols.b]), c: numOr0(r[cols.c]), d: numOr0(r[cols.d]),
+        rating: numOr0(r[cols.rating]),
+        status: r[cols.status] || 'No Data',
+        critTotal: numOr0(r[cols.critTotal]), high: numOr0(r[cols.high]), medium: numOr0(r[cols.medium]), low: numOr0(r[cols.low]),
+        isTotal, round: rnd
       });
     }
 
-    ['R1','R2','R3'].forEach(rnd=>{
-      let discTotal = emptyBucket();
-      stepOrder.forEach(step=>{
-        const b = buckets[rnd][step];
-        const status = rnd==='R1' ? statusLabelFromCounts(b) : (b.count>0 ? null : 'No Data');
-        rowsByRound[rnd].push({
-          discipline: sheetName, stage:'Baseline', milestone: step, total:b.count,
-          a:b.a, b:b.b, c:b.c, d:b.d,
-          rating: b.count ? (b.a+b.b)/b.count : 0,
-          status, critical: b.high+b.medium+b.low, high:b.high, medium:b.medium, low:b.low,
-          isTotal:false, round: rnd
-        });
-        discTotal = {count:discTotal.count+b.count, a:discTotal.a+b.a, b:discTotal.b+b.b, c:discTotal.c+b.c, d:discTotal.d+b.d,
-          high:discTotal.high+b.high, medium:discTotal.medium+b.medium, low:discTotal.low+b.low};
+    for(let i=SUMMARY_ROW_START; i<=SUMMARY_ROW_END; i++){
+      const r = all[i];
+      if(!r) continue;
+      const milestoneRaw = String(r[cols.milestone] ?? '').trim();
+      const isTotal = milestoneRaw.toUpperCase()==='TOTAL';
+      summaryByRound[rnd].push({
+        stage: 'Baseline',
+        milestone: isTotal ? 'TOTAL' : milestoneRaw,
+        total: numOr0(r[cols.total]),
+        a: numOr0(r[cols.a]), b: numOr0(r[cols.b]), c: numOr0(r[cols.c]), d: numOr0(r[cols.d]),
+        rating: numOr0(r[cols.rating]),
+        status: r[cols.status] || 'No Data',
+        critTotal: numOr0(r[cols.critTotal]), high: numOr0(r[cols.high]), medium: numOr0(r[cols.medium]), low: numOr0(r[cols.low]),
+        isTotal, round: rnd
       });
-      const dStatus = rnd==='R1' ? statusLabelFromCounts(discTotal) : (discTotal.count>0 ? null : 'No Data');
-      rowsByRound[rnd].push({
-        discipline: sheetName, stage:'Baseline', milestone:'TOTAL', total:discTotal.count,
-        a:discTotal.a, b:discTotal.b, c:discTotal.c, d:discTotal.d,
-        rating: discTotal.count ? (discTotal.a+discTotal.b)/discTotal.count : 0,
-        status: dStatus, critical: discTotal.high+discTotal.medium+discTotal.low,
-        high:discTotal.high, medium:discTotal.medium, low:discTotal.low,
-        isTotal:true, round: rnd
-      });
-    });
+    }
   });
 
-  if(!anyRowsParsed) throw new Error('Workstream tabs were found, but no rows with a recognized Milestone (Step I–IV) could be parsed. Check the sheet layout matches the expected template.');
-  return rowsByRound;
+  const totalDetailRows = Object.values(detailByRound).reduce((s,a)=>s+a.length,0);
+  if(totalDetailRows === 0) throw new Error('The RCS tab was found, but no discipline rows could be parsed. Check that its layout still matches the expected R1/R2/R3/Final review-summary blocks (rows 17-131).');
+
+  return { detailByRound, summaryByRound };
 }
 
 function parseWorkbook(workbook, fileLabel){
-  const rowsByRound = parseWorkstreamRounds(workbook);
-  return { rowsByRound, rows: rowsByRound.R1, fileLabel, sheetName: `${Object.values(rowsByRound).reduce((s,a)=>s+a.length,0)} rows across ${new Set(rowsByRound.R1.map(r=>r.discipline)).size} workstream tabs` };
+  const data = parseRCS(workbook);
+  const discCount = new Set(data.detailByRound.R1.filter(r=>r.isTotal).map(r=>r.discipline)).size;
+  return { ...data, fileLabel, sheetName: `RCS tab · ${discCount} workstreams` };
+}
+
+/* ===================== AGGREGATION HELPERS (all read straight from the RCS tab's own computed values) ===================== */
+function getOverall(round){
+  return RCS_DATA.summaryByRound[round].find(r=>r.milestone==='TOTAL');
+}
+function getMilestoneRollup(round){
+  return RCS_DATA.summaryByRound[round].filter(r=>r.milestone!=='TOTAL');
+}
+function getWorkstreamTotals(round){
+  return RCS_DATA.detailByRound[round].filter(r=>r.isTotal);
+}
+function getStepRows(round){
+  return RCS_DATA.detailByRound[round].filter(r=>!r.isTotal);
+}
+function getStageRollup(round){
+  const totals = getWorkstreamTotals(round);
+  const byStage = {};
+  totals.forEach(r=>{
+    if(!byStage[r.stage]) byStage[r.stage] = {stage:r.stage, total:0, a:0, b:0, c:0, d:0, critTotal:0, high:0, medium:0, low:0};
+    const s = byStage[r.stage];
+    s.total += r.total; s.a += r.a; s.b += r.b; s.c += r.c; s.d += r.d;
+    s.critTotal += r.critTotal; s.high += r.high; s.medium += r.medium; s.low += r.low;
+  });
+  return Object.values(byStage);
+}
+
+/* Sums an arbitrary set of Step-level rows into a single {total,a,b,c,d,critTotal,high,medium,low,rating,status}
+   record, using the same (A+B)/Total-logged convention as every other rating in this dashboard. */
+function aggregateStepRows(rows){
+  const agg = {total:0, a:0, b:0, c:0, d:0, critTotal:0, high:0, medium:0, low:0};
+  rows.forEach(r=>{
+    agg.total += r.total; agg.a += r.a; agg.b += r.b; agg.c += r.c; agg.d += r.d;
+    agg.critTotal += r.critTotal; agg.high += r.high; agg.medium += r.medium; agg.low += r.low;
+  });
+  agg.rating = agg.total>0 ? (agg.a+agg.b)/agg.total : 0;
+  agg.status = agg.total===0 ? 'No Data' : ratingFromPct(agg.rating*100).label;
+  return agg;
+}
+/* Overall figures for a round, scoped to a Discipline/Milestone selection. Empty sets = no filter = whole programme,
+   which reduces to exactly the RCS tab's own precomputed grand total (Step-level rows always sum to it). */
+function getFilteredOverall(round, discSet, mileSet){
+  let rows = getStepRows(round);
+  if(discSet && discSet.size>0) rows = rows.filter(r=>discSet.has(r.discipline));
+  if(mileSet && mileSet.size>0) rows = rows.filter(r=>mileSet.has(r.milestone));
+  return aggregateStepRows(rows);
+}
+/* Same idea, scoped to one discipline (for the per-workstream round matrix) */
+function getFilteredDisciplineAgg(round, discipline, mileSet){
+  let rows = getStepRows(round).filter(r=>r.discipline===discipline);
+  if(mileSet && mileSet.size>0) rows = rows.filter(r=>mileSet.has(r.milestone));
+  return aggregateStepRows(rows);
 }
 
 /* ===================== RENDER ORCHESTRATION ===================== */
@@ -823,12 +1026,12 @@ function destroyCharts(){
   CHARTS = {};
 }
 
-let ROWS_BY_ROUND = null;   // {R1:[...], R2:[...], R3:[...]} — full parsed dataset
+let RCS_DATA = null;
 let ACTIVE_ROUND = 'R1';
 let LAST_FILE_META = null;
 
 function renderAll(data){
-  ROWS_BY_ROUND = data.rowsByRound;
+  RCS_DATA = data;
   ACTIVE_ROUND = 'R1';
   LAST_FILE_META = data;
   document.getElementById('emptyState').classList.remove('active');
@@ -842,21 +1045,21 @@ function renderAll(data){
 
 function setActiveRound(round){
   ACTIVE_ROUND = round;
-  RAW_ROWS = ROWS_BY_ROUND[round];
   document.querySelectorAll('.round-pill').forEach(b=>b.classList.toggle('active', b.dataset.round===round));
 
-  const reviewedCount = RAW_ROWS.filter(r=>!r.isTotal).reduce((s,r)=>s+r.total,0);
-  const roundLabel = round==='R1' ? 'comments logged' : 'comments reviewed this round';
+  const overall = getOverall(round);
+  const roundLabel = round==='R1' ? 'comments logged' : 'comments with a disposition entered this round';
   document.getElementById('footNote').textContent =
-    `Source: ${LAST_FILE_META.fileLabel} · ${LAST_FILE_META.sheetName} · Viewing ${round} · ${reviewedCount.toLocaleString()} ${roundLabel} · Parsed client-side, nothing uploaded to a server.`;
+    `Source: ${LAST_FILE_META.fileLabel} · ${LAST_FILE_META.sheetName} · Viewing ${round} · ${(overall.a+overall.b+overall.c+overall.d).toLocaleString()} ${roundLabel} · Parsed client-side, nothing uploaded to a server.`;
 
   destroyCharts();
   renderKPIs();
+  renderStageRatings();
   renderMilestoneRatings();
   renderOverviewCharts();
-  renderDetailCharts();
   populateFilters();
   renderTable();
+  renderHeatmap();
 }
 
 function switchView(name){
@@ -864,212 +1067,121 @@ function switchView(name){
   document.querySelectorAll('.view').forEach(v=>v.id==='view-'+name ? v.classList.add('active') : (v.id.startsWith('view-')&&v.classList.remove('active')));
 }
 
-/* ===================== ROUNDS COMPARISON (independent of ACTIVE_ROUND — shows all 3 at once) ===================== */
-function renderRoundsCompareTab(){
-  const rounds = ['R1','R2','R3'];
-  const totalsByRound = {};
-  rounds.forEach(rnd=>{
-    const totalRows = ROWS_BY_ROUND[rnd].filter(r=>!r.isTotal);
-    totalsByRound[rnd] = {
-      total: totalRows.reduce((s,r)=>s+r.total,0),
-      a: totalRows.reduce((s,r)=>s+r.a,0),
-      b: totalRows.reduce((s,r)=>s+r.b,0),
-      c: totalRows.reduce((s,r)=>s+r.c,0),
-      d: totalRows.reduce((s,r)=>s+r.d,0)
-    };
-  });
-
-  // KPI row: reviewed volume per round
-  document.getElementById('roundsKpiRow').innerHTML = rounds.map(rnd=>{
-    const t = totalsByRound[rnd];
-    const pct = t.total ? Math.round(((t.a+t.b)/t.total)*100) : null;
-    return `
-      <div class="kpi ${t.total===0 ? '' : (pct<50?'bad':'')}">
-        <div class="num">${t.total.toLocaleString()}</div>
-        <div class="lbl">${rnd} — Comments Reviewed</div>
-        <div class="sub">${pct===null ? 'No comments reviewed yet' : `${pct}% cleared (A+B)`}</div>
-      </div>`;
-  }).join('');
-
-  // grouped bar: A/B/C/D per round
-  if(CHARTS.roundsCompare) CHARTS.roundsCompare.destroy();
-  CHARTS.roundsCompare = new Chart(document.getElementById('chartRoundsCompare'), {
-    type:'bar',
-    data:{
-      labels: rounds,
-      datasets:[
-        {label:'A — Approved', data:rounds.map(r=>totalsByRound[r].a), backgroundColor:STATUS_HEX['Approved']},
-        {label:'B — Approved w/ Comments', data:rounds.map(r=>totalsByRound[r].b), backgroundColor:STATUS_HEX['Approved with Comments']},
-        {label:'C — Revise & Resubmit', data:rounds.map(r=>totalsByRound[r].c), backgroundColor:STATUS_HEX['Revise & Resubmit']},
-        {label:'D — Rejected', data:rounds.map(r=>totalsByRound[r].d), backgroundColor:STATUS_HEX['Rejected']}
-      ]
-    },
-    options:baseBarOptions(false)
-  });
-
-  // per-discipline matrix: reviewed total per round
-  const allDisciplines = [...new Set(ROWS_BY_ROUND.R1.filter(r=>r.isTotal).map(r=>r.discipline))];
-  const head = document.getElementById('roundsMatrixHead');
-  head.innerHTML = '<th>Discipline</th>' + rounds.map(r=>`<th style="text-align:right;">${r} Reviewed</th><th>${r} Status</th>`).join('');
-
-  const body = document.getElementById('roundsMatrixBody');
-  body.innerHTML = allDisciplines.map(name=>{
-    const cells = rounds.map(rnd=>{
-      const row = ROWS_BY_ROUND[rnd].find(r=>r.isTotal && r.discipline===name);
-      const total = row ? row.total : 0;
-      const status = row ? row.status : 'No Data';
-      const tip = row ? `A:${row.a} · B:${row.b} · C:${row.c} · D:${row.d}` : 'No data';
-      const display = total>0 ? total.toLocaleString() : '–';
-      const totalCell = `<td style="text-align:right;" title="${escAttr(rnd + ' — ' + tip)}">${display}</td>`;
-      const statusCell = `<td>${status ? `<span class="status-chip" style="background:${colorForStatus(status)};color:${textColorForStatus(status)};">${escHtml(status)}</span>` : '<span style="color:var(--ink-soft);">—</span>'}</td>`;
-      return totalCell + statusCell;
-    }).join('');
-    return `<tr><td>${escHtml(shortenLabel(name))}</td>${cells}</tr>`;
-  }).join('');
-}
-
-/* ===================== KPIs ===================== */
+/* ===================== KPIs (Overall) ===================== */
 function renderKPIs(){
-  const totalRows = RAW_ROWS.filter(r=>!r.isTotal);
-  const grand = RAW_ROWS.find(r => r.discipline===undefined) || null;
-
-  const totalComments = totalRows.reduce((s,r)=>s+r.total,0);
-  const totA = totalRows.reduce((s,r)=>s+r.a,0);
-  const totB = totalRows.reduce((s,r)=>s+r.b,0);
-  const totC = totalRows.reduce((s,r)=>s+r.c,0);
-  const totD = totalRows.reduce((s,r)=>s+r.d,0);
-  const totCrit = totalRows.reduce((s,r)=>s+r.critical,0);
-  const pctClear = totalComments ? Math.round(((totA+totB)/totalComments)*100) : 0;
-
-  const stageTotal = totA+totB+totC+totD;
-  const stagePct = stageTotal ? (totA+totB)/stageTotal*100 : 0;
-  const stageRating = stageTotal ? ratingFromPct(stagePct) : null;
-
-  const disciplineTotals = RAW_ROWS.filter(r=>r.isTotal);
-  const disciplinesWithData = disciplineTotals.filter(r=>r.total>0).length;
-  const disciplinesRejected = disciplineTotals.filter(r=>r.status==='Rejected').length;
+  const overall = getOverall(ACTIVE_ROUND);
+  const workstreams = getWorkstreamTotals(ACTIVE_ROUND);
+  const reviewedWorkstreams = workstreams.filter(r=>reviewedCount(r)>0).length;
+  const atRisk = workstreams.filter(r=>effectiveStatus(r)==='Revise & Resubmit' || effectiveStatus(r)==='Rejected').length;
+  const eStatus = effectiveStatus(overall);
+  const eRating = effectiveRating(overall);
+  const pct = eRating===null ? null : Math.round(eRating*100);
 
   const kpis = [
-    {num:totalComments.toLocaleString(), lbl:'Total Comments Logged', sub:`Across ${disciplineTotals.length} disciplines`, cls:''},
-    {num:pctClear+'%', lbl:'Cleared (A + B)', sub:`${(totA+totB).toLocaleString()} of ${totalComments.toLocaleString()} comments`, cls:pctClear<50?'bad':''},
-    {num: stageRating ? stageRating.label : 'No Data', lbl:'Overall Stage Status', sub: stageRating ? `${stagePct.toFixed(1)}% (A+B) — Baseline, all steps` : 'No comments logged yet', cls: stageRating && (stageRating.code==='C'||stageRating.code==='D') ? 'bad' : '', text:true},
-    {num:totCrit.toLocaleString(), lbl:'Critical Open Items', sub:'Severity = Critical, all steps', cls:totCrit>0?'bad':''},
-    {num:disciplinesRejected+' / '+disciplineTotals.length, lbl:'Disciplines at "Rejected"', sub:`${disciplinesWithData} disciplines with submissions`, cls:disciplinesRejected>0?'warn':''}
+    {num:overall.total.toLocaleString(), lbl:'Total Comments Logged', sub:`Across ${workstreams.length} workstreams`, cls:''},
+    {num:pct===null ? '—' : pct+'%', lbl:'Approval Rating (A + B)', sub:pct===null ? 'No comments reviewed yet' : eStatus, cls: (eStatus==='Rejected'||eStatus==='Revise & Resubmit') ? 'bad' : ''},
+    {num:overall.critTotal.toLocaleString(), lbl:'Critical Open Comments', sub:`${overall.high.toLocaleString()} High · ${overall.medium.toLocaleString()} Medium · ${overall.low.toLocaleString()} Low`, cls:overall.critTotal>0?'bad':''},
+    {num:reviewedWorkstreams+' / '+workstreams.length, lbl:'Workstreams Reviewed', sub:`${ACTIVE_ROUND} disposition entered`, cls:''},
+    {num:atRisk+' / '+workstreams.length, lbl:'Workstreams At Risk', sub:'Revise & Resubmit or Rejected', cls:atRisk>0?'warn':''}
   ];
 
   document.getElementById('kpiRow').innerHTML = kpis.map(k=>`
     <div class="kpi ${k.cls}">
-      <div class="num" style="${k.text? 'font-size:24px;':''}">${k.num}</div>
+      <div class="num">${k.num}</div>
       <div class="lbl">${k.lbl}</div>
       <div class="sub">${k.sub}</div>
     </div>
   `).join('');
 }
 
-/* ===================== OVERALL RATING BY MILESTONE ===================== */
-function ratingFromPct(pct){
-  if(pct >= 90) return {label:'Approved', code:'A'};
-  if(pct >= 75) return {label:'Approved with Comments', code:'B'};
-  if(pct >= 50) return {label:'Revise & Resubmit', code:'C'};
-  return {label:'Rejected', code:'D'};
-}
-
-function renderMilestoneRatings(){
-  const stepOrder = ['Step I','Step II','Step III','Step IV'];
-  const totalRows = RAW_ROWS.filter(r=>!r.isTotal);
-
-  const cards = stepOrder.map(step=>{
-    const rs = totalRows.filter(r=>String(r.milestone).trim()===step);
-    const a = rs.reduce((s,r)=>s+r.a,0);
-    const b = rs.reduce((s,r)=>s+r.b,0);
-    const c = rs.reduce((s,r)=>s+r.c,0);
-    const d = rs.reduce((s,r)=>s+r.d,0);
-    const total = a+b+c+d;
-    if(total === 0){
-      return {step, noData:true};
-    }
-    const pct = (a+b)/total*100;
-    const rating = ratingFromPct(pct);
-    return {step, noData:false, pct, total, a, b, c, d, rating};
-  });
-
-  document.getElementById('milestoneRatingRow').innerHTML = cards.map(card=>{
-    if(card.noData){
+/* ===================== APPROVAL STATUS BY STAGE ===================== */
+function renderStageRatings(){
+  const stages = getStageRollup(ACTIVE_ROUND);
+  document.getElementById('stageRatingRow').innerHTML = stages.map(s=>{
+    const total = s.a+s.b+s.c+s.d;
+    if(total===0){
       return `
         <div class="rating-card no-data" style="border-top-color:var(--status-n);">
-          <div class="step-lbl">${card.step}</div>
+          <div class="step-lbl">${escHtml(s.stage)}</div>
           <div class="pct">—</div>
-          <div class="pct-lbl">No data submitted</div>
+          <div class="pct-lbl">No comments reviewed yet</div>
         </div>`;
     }
-    const color = colorForStatus(card.rating.label);
-    const textColor = textColorForStatus(card.rating.label);
+    const pct = (s.a+s.b)/total*100;
+    const rating = ratingFromPct(pct);
+    const color = colorForStatus(rating.label);
+    const textColor = textColorForStatus(rating.label);
     return `
       <div class="rating-card" style="border-top-color:${color};">
-        <div class="step-lbl">${card.step}</div>
-        <div class="pct">${card.pct.toFixed(1)}%</div>
-        <div class="pct-lbl">(A+B) of ${card.total.toLocaleString()} comments</div>
-        <span class="rating-chip" style="background:${color};color:${textColor};">${card.rating.label}</span>
+        <div class="step-lbl">${escHtml(s.stage)}</div>
+        <div class="pct">${pct.toFixed(1)}%</div>
+        <div class="pct-lbl">(A+B) of ${s.total.toLocaleString()} comments</div>
+        <span class="rating-chip" style="background:${color};color:${textColor};">${rating.label}</span>
+      </div>`;
+  }).join('');
+}
+
+/* ===================== APPROVAL STATUS BY MILESTONE ===================== */
+function renderMilestoneRatings(){
+  const rows = getMilestoneRollup(ACTIVE_ROUND);
+  document.getElementById('milestoneRatingRow').innerHTML = rows.map(row=>{
+    const eRating = effectiveRating(row);
+    if(eRating===null){
+      return `
+        <div class="rating-card no-data" style="border-top-color:var(--status-n);">
+          <div class="step-lbl">${escHtml(row.milestone)}</div>
+          <div class="pct">—</div>
+          <div class="pct-lbl">No comments reviewed yet</div>
+        </div>`;
+    }
+    const eStatus = effectiveStatus(row);
+    const pct = eRating*100;
+    const color = colorForStatus(eStatus);
+    const textColor = textColorForStatus(eStatus);
+    return `
+      <div class="rating-card" style="border-top-color:${color};">
+        <div class="step-lbl">${escHtml(row.milestone)}</div>
+        <div class="pct">${pct.toFixed(1)}%</div>
+        <div class="pct-lbl">(A+B) of ${reviewedCount(row).toLocaleString()} reviewed comments</div>
+        <span class="rating-chip" style="background:${color};color:${textColor};">${eStatus}</span>
       </div>`;
   }).join('');
 }
 
 /* ===================== OVERVIEW CHARTS ===================== */
 function renderOverviewCharts(){
-  const stepOrder = ['Step I','Step II','Step III','Step IV'];
-  const totalRows = RAW_ROWS.filter(r=>!r.isTotal);
-
-  // Milestone stacked bar (sum across disciplines per step)
-  const byStep = stepOrder.map(step=>{
-    const rs = totalRows.filter(r=>String(r.milestone).trim()===step);
-    return {
-      step,
-      a: rs.reduce((s,r)=>s+r.a,0),
-      b: rs.reduce((s,r)=>s+r.b,0),
-      c: rs.reduce((s,r)=>s+r.c,0),
-      d: rs.reduce((s,r)=>s+r.d,0)
-    };
-  }).filter(s => (s.a+s.b+s.c+s.d) > 0);
-
+  const milestoneRows = getMilestoneRollup(ACTIVE_ROUND).filter(r=>(r.a+r.b+r.c+r.d)>0);
   CHARTS.milestone = new Chart(document.getElementById('chartMilestone'), {
     type:'bar',
     data:{
-      labels: byStep.map(s=>s.step),
+      labels: milestoneRows.map(r=>r.milestone),
       datasets:[
-        {label:'A — Approved', data:byStep.map(s=>s.a), backgroundColor:STATUS_HEX['Approved']},
-        {label:'B — Approved w/ Comments', data:byStep.map(s=>s.b), backgroundColor:STATUS_HEX['Approved with Comments']},
-        {label:'C — Revise & Resubmit', data:byStep.map(s=>s.c), backgroundColor:STATUS_HEX['Revise & Resubmit']},
-        {label:'D — Rejected', data:byStep.map(s=>s.d), backgroundColor:STATUS_HEX['Rejected']}
+        {label:'A — Approved', data:milestoneRows.map(r=>r.a), backgroundColor:STATUS_HEX['Approved']},
+        {label:'B — Approved w/ Comments', data:milestoneRows.map(r=>r.b), backgroundColor:STATUS_HEX['Approved with Comments']},
+        {label:'C — Revise & Resubmit', data:milestoneRows.map(r=>r.c), backgroundColor:STATUS_HEX['Revise & Resubmit']},
+        {label:'D — Rejected', data:milestoneRows.map(r=>r.d), backgroundColor:STATUS_HEX['Rejected']}
       ]
     },
     options:baseBarOptions(true)
   });
 
-  // Status pie — aggregate disposition counts
-  const aTot = totalRows.reduce((s,r)=>s+r.a,0);
-  const bTot = totalRows.reduce((s,r)=>s+r.b,0);
-  const cTot = totalRows.reduce((s,r)=>s+r.c,0);
-  const dTot = totalRows.reduce((s,r)=>s+r.d,0);
+  const overall = getOverall(ACTIVE_ROUND);
   CHARTS.statusPie = new Chart(document.getElementById('chartStatusPie'), {
     type:'doughnut',
     data:{
       labels:['A — Approved','B — Approved w/ Comments','C — Revise & Resubmit','D — Rejected'],
-      datasets:[{data:[aTot,bTot,cTot,dTot], backgroundColor:[STATUS_HEX['Approved'],STATUS_HEX['Approved with Comments'],STATUS_HEX['Revise & Resubmit'],STATUS_HEX['Rejected']], borderWidth:2, borderColor:themeVar('--surface')}]
+      datasets:[{data:[overall.a,overall.b,overall.c,overall.d], backgroundColor:[STATUS_HEX['Approved'],STATUS_HEX['Approved with Comments'],STATUS_HEX['Revise & Resubmit'],STATUS_HEX['Rejected']], borderWidth:2, borderColor:themeVar('--surface')}]
     },
     options:basePieOptions()
   });
 
-  // Severity pie — High / Medium / Low only (Critical surfaced separately via the KPI card)
-  const high = totalRows.reduce((s,r)=>s+r.high,0);
-  const med = totalRows.reduce((s,r)=>s+r.medium,0);
-  const low = totalRows.reduce((s,r)=>s+r.low,0);
   CHARTS.severityPie = new Chart(document.getElementById('chartSeverityPie'), {
     type:'doughnut',
     data:{
       labels:['High','Medium','Low'],
-      datasets:[{data:[high,med,low], backgroundColor:['#b5453f','#d98f3c','#9aa688'], borderWidth:2, borderColor:themeVar('--surface')}]
+      datasets:[{data:[overall.high,overall.medium,overall.low], backgroundColor:['#b5453f','#d98f3c','#9aa688'], borderWidth:2, borderColor:themeVar('--surface')}]
     },
-    options: (high+med+low)===0 ? noDataOptions() : {
+    options: (overall.high+overall.medium+overall.low)===0 ? noDataOptions() : {
       ...basePieOptions(),
       plugins:{
         ...basePieOptions().plugins,
@@ -1083,16 +1195,15 @@ function renderOverviewCharts(){
     }
   });
 
-  // Disciplines by status — count of disciplines currently sitting at each disposition (TOTAL rows)
-  const disciplineTotals = RAW_ROWS.filter(r=>r.isTotal);
+  const workstreams = getWorkstreamTotals(ACTIVE_ROUND);
   const statusOrder = ['Approved','Approved with Comments','Revise & Resubmit','Rejected','No Data'];
-  const statusCounts = statusOrder.map(s => disciplineTotals.filter(r=>r.status===s).length);
+  const statusCounts = statusOrder.map(s => workstreams.filter(r=>effectiveStatus(r)===s).length);
   CHARTS.ratingHist = new Chart(document.getElementById('chartRatingHist'), {
     type:'bar',
     data:{
-      labels: statusOrder.map(s=>s==='Approved with Comments' ? 'Approved w/ Comments' : (s==='Revise & Resubmit' ? 'Revise & Resubmit' : s)),
+      labels: statusOrder.map(s=>s==='Approved with Comments' ? 'Approved w/ Comments' : s),
       datasets:[{
-        label:'Disciplines',
+        label:'Workstreams',
         data: statusCounts,
         backgroundColor: statusOrder.map(s => s==='No Data' ? '#a8a39a' : colorForStatus(s)),
         borderRadius:2
@@ -1102,7 +1213,7 @@ function renderOverviewCharts(){
       responsive:true, maintainAspectRatio:false,
       plugins:{
         legend:{display:false},
-        tooltip:{callbacks:{label:(ctx)=>`${ctx.parsed.y} discipline${ctx.parsed.y===1?'':'s'}`}},
+        tooltip:{callbacks:{label:(ctx)=>`${ctx.parsed.y} workstream${ctx.parsed.y===1?'':'s'}`}},
         datalabels:{
           display:(ctx)=>ctx.dataset.data[ctx.dataIndex] > 0,
           anchor:'end', align:'top',
@@ -1113,34 +1224,19 @@ function renderOverviewCharts(){
       scales:{ y:{beginAtZero:true, ticks:{precision:0}, grid:{color:themeVar('--chart-grid')}}, x:{grid:{display:false}, ticks:{font:{size:10.5}, maxRotation:20, minRotation:0}} }
     }
   });
-}
 
-/* ===================== DETAIL CHARTS ===================== */
-function getDetailSorted(){
-  const totals = RAW_ROWS.filter(r=>r.isTotal);
-  const sortVal = document.getElementById('sortDetail').value;
-  const arr = [...totals];
-  if(sortVal==='total-desc') arr.sort((x,y)=>y.total-x.total);
-  else if(sortVal==='critical-desc') arr.sort((x,y)=>y.critical-x.critical);
-  else if(sortVal==='rating-asc') arr.sort((x,y)=>x.rating-y.rating);
-  else if(sortVal==='alpha') arr.sort((x,y)=>String(x.discipline).localeCompare(String(y.discipline)));
-  return arr;
-}
-
-function renderDetailCharts(){
-  const totals = getDetailSorted();
-  const labels = totals.map(r=>shortenLabel(r.discipline));
-
+  const sorted = [...workstreams].sort((x,y)=>y.total-x.total);
+  const labels = sorted.map(r=>shortenLabel(r.discipline));
   if(CHARTS.disciplineStacked) CHARTS.disciplineStacked.destroy();
   CHARTS.disciplineStacked = new Chart(document.getElementById('chartDisciplineStacked'), {
     type:'bar',
     data:{
       labels,
       datasets:[
-        {label:'A', data:totals.map(r=>r.a), backgroundColor:STATUS_HEX['Approved']},
-        {label:'B', data:totals.map(r=>r.b), backgroundColor:STATUS_HEX['Approved with Comments']},
-        {label:'C', data:totals.map(r=>r.c), backgroundColor:STATUS_HEX['Revise & Resubmit']},
-        {label:'D', data:totals.map(r=>r.d), backgroundColor:STATUS_HEX['Rejected']}
+        {label:'A', data:sorted.map(r=>r.a), backgroundColor:STATUS_HEX['Approved']},
+        {label:'B', data:sorted.map(r=>r.b), backgroundColor:STATUS_HEX['Approved with Comments']},
+        {label:'C', data:sorted.map(r=>r.c), backgroundColor:STATUS_HEX['Revise & Resubmit']},
+        {label:'D', data:sorted.map(r=>r.d), backgroundColor:STATUS_HEX['Rejected']}
       ]
     },
     options:{
@@ -1153,85 +1249,6 @@ function renderDetailCharts(){
       }
     }
   });
-
-  // critical bar — only disciplines with critical > 0
-  const critRows = totals.filter(r=>r.critical>0);
-  if(CHARTS.criticalBar) CHARTS.criticalBar.destroy();
-  CHARTS.criticalBar = new Chart(document.getElementById('chartCriticalBar'), {
-    type:'bar',
-    data:{
-      labels: critRows.map(r=>shortenLabel(r.discipline)),
-      datasets:[{label:'Critical comments', data:critRows.map(r=>r.critical), backgroundColor:'#7a1f1f', borderRadius:2}]
-    },
-    options: critRows.length===0 ? noDataOptions() : {
-      responsive:true, maintainAspectRatio:false,
-      plugins:{legend:{display:false}},
-      scales:{ y:{beginAtZero:true, ticks:{precision:0}, grid:{color:themeVar('--chart-grid')}}, x:{grid:{display:false}, ticks:{font:{size:10.5}}} }
-    }
-  });
-
-  // step grouped — discipline x step, totals
-  const stepOrder = ['Step I','Step II','Step III','Step IV'];
-  const disciplineRows = RAW_ROWS.filter(r=>!r.isTotal);
-  const disciplineNames = [...new Set(disciplineRows.map(r=>r.discipline))];
-  const orderedNames = totals.map(r=>r.discipline); // keep sort order from totals
-  const datasetsByStep = stepOrder.map((step,i)=>{
-    const colorList = ['#1f3864','#2e5496','#c9a84c','#9aa688'];
-    return {
-      label: step,
-      data: orderedNames.map(name=>{
-        const row = disciplineRows.find(r=>r.discipline===name && String(r.milestone).trim()===step);
-        return row ? row.total : 0;
-      }),
-      backgroundColor: colorList[i]
-    };
-  });
-  if(CHARTS.stepGrouped) CHARTS.stepGrouped.destroy();
-  CHARTS.stepGrouped = new Chart(document.getElementById('chartStepGrouped'), {
-    type:'bar',
-    data:{ labels: orderedNames.map(shortenLabel), datasets: datasetsByStep },
-    options:{
-      responsive:true, maintainAspectRatio:false,
-      plugins:{legend:{position:'top', labels:{boxWidth:10,font:{size:11}}}},
-      scales:{
-        x:{ticks:{font:{size:10}, maxRotation:55, minRotation:55}, grid:{display:false}},
-        y:{beginAtZero:true, grid:{color:themeVar('--chart-grid')}}
-      }
-    }
-  });
-
-  renderStepMatrix(stepOrder, disciplineRows, orderedNames);
-}
-
-function renderStepMatrix(stepOrder, disciplineRows, orderedNames){
-  const head = document.getElementById('stepMatrixHead');
-  head.innerHTML = '<th>Discipline</th>' +
-    stepOrder.map(s=>`<th style="text-align:right;">${s}</th><th>${s} Status</th>`).join('') +
-    '<th style="text-align:right;">Total</th>';
-
-  const body = document.getElementById('stepMatrixBody');
-  body.innerHTML = orderedNames.map(name=>{
-    let rowTotal = 0;
-    const cells = stepOrder.map(step=>{
-      const row = disciplineRows.find(r=>r.discipline===name && String(r.milestone).trim()===step);
-      const total = row ? row.total : 0;
-      rowTotal += total;
-      const status = row ? row.status : 'No Data';
-      const tip = row
-        ? `A:${row.a} · B:${row.b} · C:${row.c} · D:${row.d}`
-        : 'No data';
-      const display = total>0 ? total.toLocaleString() : '–';
-      const totalCell = `<td style="text-align:right;" title="${escAttr(step + ' — ' + tip)}">${display}</td>`;
-      const statusCell = `<td><span class="status-chip" style="background:${colorForStatus(status)};color:${textColorForStatus(status)};">${escHtml(status)}</span></td>`;
-      return totalCell + statusCell;
-    }).join('');
-    return `<tr><td>${escHtml(name)}</td>${cells}<td style="text-align:right;font-weight:700;">${rowTotal.toLocaleString()}</td></tr>`;
-  }).join('');
-}
-
-function shortenLabel(name){
-  if(!name) return '';
-  return String(name).replace(/^V\d?(\.\d+)?\.?\s*/i,'').replace(/^V[\d\.x]+\.\s*/i,'').trim() || name;
 }
 
 /* shared chart option builders */
@@ -1259,8 +1276,12 @@ function basePieOptions(){
 function noDataOptions(){
   return { responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}}, scales:{x:{display:false},y:{display:false}} };
 }
+function shortenLabel(name){
+  if(!name) return '';
+  return String(name).replace(/^V\d?(\.\d+)?\.?\s*/i,'').replace(/^V[\d\.x]+\.\s*/i,'').trim() || name;
+}
 
-/* ===================== REGISTER / TABLE ===================== */
+/* ===================== DISCIPLINE × MILESTONE TABLE ===================== */
 const COLS = [
   {key:'discipline', label:'Discipline'},
   {key:'stage', label:'Stage'},
@@ -1270,58 +1291,62 @@ const COLS = [
   {key:'b', label:'B', num:true},
   {key:'c', label:'C', num:true},
   {key:'d', label:'D', num:true},
-  {key:'rating', label:'R1 Rating', num:true, pct:true},
+  {key:'rating', label:'Rating', num:true, pct:true},
   {key:'status', label:'Status'},
-  {key:'critical', label:'Critical', num:true},
+  {key:'critTotal', label:'Critical Total', num:true},
   {key:'high', label:'High', num:true},
   {key:'medium', label:'Medium', num:true},
   {key:'low', label:'Low', num:true}
 ];
 
 function populateFilters(){
-  const disc = [...new Set(RAW_ROWS.filter(r=>!r.isTotal).map(r=>r.discipline))].sort();
-  const stat = [...new Set(RAW_ROWS.map(r=>r.status))].sort();
-  const mile = [...new Set(RAW_ROWS.filter(r=>!r.isTotal).map(r=>r.milestone))];
-
-  fillSelect('filterDiscipline', disc);
+  const rows = getStepRows(ACTIVE_ROUND);
+  const disc = [...new Set(rows.map(r=>r.discipline))].sort();
+  const stat = [...new Set(RCS_DATA.detailByRound[ACTIVE_ROUND].map(r=>effectiveStatus(r)))].sort();
+  const mile = [...new Set(rows.map(r=>r.milestone))];
+  const onChange = ()=>{ renderTable(); renderHeatmap(); };
+  buildMultiSelect('msDiscipline', disc, 'All Disciplines', onChange);
+  buildMultiSelect('msMilestone', mile, 'All Milestones', onChange);
   fillSelect('filterStatus', stat);
-  fillSelect('filterMilestone', mile);
 }
 function fillSelect(id, values){
   const sel = document.getElementById(id);
+  const prev = sel.value;
   sel.innerHTML = '<option value="">All</option>' + values.map(v=>`<option value="${escAttr(v)}">${escHtml(v)}</option>`).join('');
+  if(values.includes(prev)) sel.value = prev;
 }
 
 function renderTable(){
   const head = document.getElementById('tableHead');
   head.innerHTML = COLS.map(c=>`<th data-key="${c.key}">${c.label}<span class="arrow">${SORT_STATE.col===c.key ? (SORT_STATE.dir===1?'▲':'▼') : ''}</span></th>`).join('');
 
-  let rows = RAW_ROWS.filter(r=>!r.isTotal || true); // include totals, marked visually
+  const discSel = MS_STATE.msDiscipline;
+  const mileSel = MS_STATE.msMilestone;
+  const statF = document.getElementById('filterStatus').value;
+  const searchF = document.getElementById('filterSearch').value.trim().toLowerCase();
 
-  const dF = document.getElementById('filterDiscipline').value;
-  const sF = document.getElementById('filterStatus').value;
-  const mF = document.getElementById('filterMilestone').value;
-  const qF = document.getElementById('filterSearch').value.trim().toLowerCase();
-
-  if(dF) rows = rows.filter(r=>r.discipline===dF);
-  if(sF) rows = rows.filter(r=>r.status===sF);
-  if(mF) rows = rows.filter(r=>String(r.milestone)===mF);
-  if(qF) rows = rows.filter(r=>String(r.discipline).toLowerCase().includes(qF));
+  let rows = [...RCS_DATA.detailByRound[ACTIVE_ROUND]];
+  if(discSel.size>0) rows = rows.filter(r=>discSel.has(r.discipline));
+  if(statF) rows = rows.filter(r=>effectiveStatus(r)===statF);
+  if(mileSel.size>0) rows = rows.filter(r=>mileSel.has(r.milestone));
+  if(searchF) rows = rows.filter(r=>r.discipline.toLowerCase().includes(searchF));
 
   if(SORT_STATE.col){
-    rows = [...rows].sort((x,y)=>{
-      const a = x[SORT_STATE.col], b = y[SORT_STATE.col];
-      if(typeof a === 'number' && typeof b === 'number') return (a-b)*SORT_STATE.dir;
-      return String(a).localeCompare(String(b)) * SORT_STATE.dir;
+    rows.sort((x,y)=>{
+      const kx = x[SORT_STATE.col], ky = y[SORT_STATE.col];
+      if(typeof kx === 'number') return (kx-ky)*SORT_STATE.dir;
+      return String(kx).localeCompare(String(ky))*SORT_STATE.dir;
     });
   }
 
   const body = document.getElementById('tableBody');
   body.innerHTML = rows.map(r=>{
-    const chip = `<span class="status-chip" style="background:${colorForStatus(r.status)};color:${textColorForStatus(r.status)}">${escHtml(r.status)}</span>`;
-    const critCell = r.critical>0 ? `<span class="crit-badge has-crit">${r.critical}</span>` : `<span class="crit-badge">0</span>`;
+    const eStatus = effectiveStatus(r);
+    const eRating = effectiveRating(r);
+    const chip = `<span class="status-chip" style="background:${colorForStatus(eStatus)};color:${textColorForStatus(eStatus)};">${escHtml(eStatus)}</span>`;
+    const critCell = r.critTotal>0 ? `<span class="crit-badge has-crit">${r.critTotal}</span>` : r.critTotal;
     return `<tr class="${r.isTotal?'row-total':''}">
-      <td>${escHtml(r.discipline)}</td>
+      <td>${escHtml(shortenLabel(r.discipline))}</td>
       <td>${escHtml(r.stage)}</td>
       <td>${escHtml(r.milestone)}</td>
       <td>${r.total.toLocaleString()}</td>
@@ -1329,7 +1354,7 @@ function renderTable(){
       <td>${r.b}</td>
       <td>${r.c}</td>
       <td>${r.d}</td>
-      <td>${(r.rating*100).toFixed(1)}%</td>
+      <td>${eRating===null ? '—' : (eRating*100).toFixed(1)+'%'}</td>
       <td>${chip}</td>
       <td>${critCell}</td>
       <td>${r.high}</td>
@@ -1346,6 +1371,133 @@ function renderTable(){
       renderTable();
     });
   });
+}
+
+/* ===================== HEATMAP — Workstream x Milestone ===================== */
+function renderHeatmap(){
+  const allSteps = ['Step I','Step II','Step III','Step IV'];
+  const mileSel = MS_STATE.msMilestone;
+  const discSel = MS_STATE.msDiscipline;
+  const stepOrder = mileSel.size>0 ? allSteps.filter(s=>mileSel.has(s)) : allSteps;
+  const stepRows = getStepRows(ACTIVE_ROUND);
+  const workstreamTotals = getWorkstreamTotals(ACTIVE_ROUND)
+    .filter(r=> discSel.size===0 || discSel.has(r.discipline));
+  const workstreams = workstreamTotals.map(r=>r.discipline); // preserves RCS tab order
+
+  const head = document.getElementById('heatmapHead');
+  head.innerHTML = '<th>Workstream</th>' + stepOrder.map(s=>`<th>${s}</th>`).join('') + '<th>TOTAL</th>';
+
+  const body = document.getElementById('heatmapBody');
+  if(workstreams.length===0 || stepOrder.length===0){
+    body.innerHTML = `<tr><td colspan="${stepOrder.length+2}" style="text-align:center;color:var(--ink-soft);padding:24px;background:var(--surface);">No workstreams match the current filters.</td></tr>`;
+    return;
+  }
+  body.innerHTML = workstreams.map(name=>{
+    const cells = stepOrder.map(step=>{
+      const row = stepRows.find(r=>r.discipline===name && r.milestone===step);
+      const eRating = row ? effectiveRating(row) : null;
+      if(!row || eRating===null){
+        return `<td><div class="hm-cell" style="background:var(--surface-2);color:var(--ink-soft);" title="${escAttr(step + ' — no comments reviewed yet')}">—</div></td>`;
+      }
+      const pct = Math.round(eRating*100);
+      const eStatus = effectiveStatus(row);
+      const bg = colorForStatus(eStatus);
+      const fg = textColorForStatus(eStatus);
+      const tip = `${step} — ${eStatus} · ${pct}% (A+B) of ${reviewedCount(row)} reviewed comments`;
+      return `<td><div class="hm-cell" style="background:${bg};color:${fg};" title="${escAttr(tip)}">${pct}%</div></td>`;
+    }).join('');
+    const totalRow = workstreamTotals.find(r=>r.discipline===name);
+    const totalERating = totalRow ? effectiveRating(totalRow) : null;
+    const totalCell = totalERating!==null
+      ? `<td><div class="hm-cell" style="background:${colorForStatus(effectiveStatus(totalRow))};color:${textColorForStatus(effectiveStatus(totalRow))};" title="${escAttr('TOTAL — ' + effectiveStatus(totalRow))}">${Math.round(totalERating*100)}%</div></td>`
+      : `<td><div class="hm-cell" style="background:var(--surface-2);color:var(--ink-soft);">—</div></td>`;
+    return `<tr><td class="hm-disc">${escHtml(shortenLabel(name))}</td>${cells}${totalCell}</tr>`;
+  }).join('');
+}
+
+/* ===================== ROUNDS COMPARISON (independent of ACTIVE_ROUND — shows all 4 at once) ===================== */
+function renderRoundsCompareTab(){
+  const discSel = MS_STATE.msRoundsDiscipline;
+  const mileSel = MS_STATE.msRoundsMilestone;
+
+  const allDisciplines = getWorkstreamTotals('R1').map(r=>r.discipline).sort(); // RCS tab's own discipline order, sorted for the picker
+  const allSteps = ['Step I','Step II','Step III','Step IV'];
+  const onChange = ()=>renderRoundsCompareTab();
+  buildMultiSelect('msRoundsDiscipline', allDisciplines, 'All Disciplines', onChange);
+  buildMultiSelect('msRoundsMilestone', allSteps, 'All Milestones', onChange);
+
+  const overallByRound = {};
+  ROUNDS.forEach(rnd=> overallByRound[rnd] = getFilteredOverall(rnd, discSel, mileSel));
+
+  document.getElementById('roundsKpiRow').innerHTML = ROUNDS.map(rnd=>{
+    const o = overallByRound[rnd];
+    const reviewed = o.a+o.b+o.c+o.d;
+    const pct = reviewed ? Math.round((o.rating)*100) : null;
+    return `
+      <div class="kpi ${reviewed===0 ? '' : (pct<50?'bad':'')}">
+        <div class="num">${reviewed.toLocaleString()}</div>
+        <div class="lbl">${rnd} — Comments Reviewed</div>
+        <div class="sub">${pct===null ? 'No comments reviewed yet' : `${pct}% cleared (A+B) · ${o.status}`}</div>
+      </div>`;
+  }).join('');
+
+  document.getElementById('criticalKpiRow').innerHTML = ROUNDS.map(rnd=>{
+    const o = overallByRound[rnd];
+    return `
+      <div class="kpi ${o.critTotal>0 ? 'bad' : ''}">
+        <div class="num">${o.critTotal.toLocaleString()}</div>
+        <div class="lbl">${rnd} — Critical Open Comments</div>
+        <div class="sub">${o.high.toLocaleString()} High · ${o.medium.toLocaleString()} Medium · ${o.low.toLocaleString()} Low</div>
+      </div>`;
+  }).join('');
+
+  if(CHARTS.roundsCompare) CHARTS.roundsCompare.destroy();
+  CHARTS.roundsCompare = new Chart(document.getElementById('chartRoundsCompare'), {
+    type:'bar',
+    data:{
+      labels: ROUNDS,
+      datasets:[
+        {label:'A — Approved', data:ROUNDS.map(r=>overallByRound[r].a), backgroundColor:STATUS_HEX['Approved']},
+        {label:'B — Approved w/ Comments', data:ROUNDS.map(r=>overallByRound[r].b), backgroundColor:STATUS_HEX['Approved with Comments']},
+        {label:'C — Revise & Resubmit', data:ROUNDS.map(r=>overallByRound[r].c), backgroundColor:STATUS_HEX['Revise & Resubmit']},
+        {label:'D — Rejected', data:ROUNDS.map(r=>overallByRound[r].d), backgroundColor:STATUS_HEX['Rejected']}
+      ]
+    },
+    options:baseBarOptions(false)
+  });
+
+  if(CHARTS.severityByRound) CHARTS.severityByRound.destroy();
+  CHARTS.severityByRound = new Chart(document.getElementById('chartSeverityByRound'), {
+    type:'bar',
+    data:{
+      labels: ROUNDS,
+      datasets:[
+        {label:'High', data:ROUNDS.map(r=>overallByRound[r].high), backgroundColor:'#b5453f'},
+        {label:'Medium', data:ROUNDS.map(r=>overallByRound[r].medium), backgroundColor:'#d98f3c'},
+        {label:'Low', data:ROUNDS.map(r=>overallByRound[r].low), backgroundColor:'#9aa688'}
+      ]
+    },
+    options:baseBarOptions(false)
+  });
+
+  const workstreams = discSel.size>0 ? allDisciplines.filter(d=>discSel.has(d)) : allDisciplines;
+  const head = document.getElementById('roundsMatrixHead');
+  head.innerHTML = '<th>Discipline</th>' + ROUNDS.map(r=>`<th style="text-align:right;">${r} Reviewed</th><th>${r} Status</th>`).join('');
+
+  const body = document.getElementById('roundsMatrixBody');
+  body.innerHTML = (workstreams.length===0 ? '' : workstreams.map(name=>{
+    const cells = ROUNDS.map(rnd=>{
+      const row = getFilteredDisciplineAgg(rnd, name, mileSel);
+      const reviewed = reviewedCount(row);
+      const status = effectiveStatus(row);
+      const tip = `A:${row.a} · B:${row.b} · C:${row.c} · D:${row.d}`;
+      const display = reviewed>0 ? reviewed.toLocaleString() : '–';
+      const totalCell = `<td style="text-align:right;" title="${escAttr(rnd + ' — ' + tip)}">${display}</td>`;
+      const statusCell = `<td>${status ? `<span class="status-chip" style="background:${colorForStatus(status)};color:${textColorForStatus(status)};">${escHtml(status)}</span>` : '<span style="color:var(--ink-soft);">—</span>'}</td>`;
+      return totalCell + statusCell;
+    }).join('');
+    return `<tr><td>${escHtml(shortenLabel(name))}</td>${cells}</tr>`;
+  }).join('')) || `<tr><td colspan="${1+ROUNDS.length*2}" style="text-align:center;color:var(--ink-soft);padding:24px;">No workstreams match the current filters.</td></tr>`;
 }
 
 function escHtml(s){ return String(s===null||s===undefined?'':s).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
@@ -1375,12 +1527,11 @@ document.querySelectorAll('.viewnav button').forEach(btn=>{
 
 document.querySelectorAll('.round-pill').forEach(btn=>{
   btn.addEventListener('click', ()=>{
-    if(ROWS_BY_ROUND) setActiveRound(btn.dataset.round);
+    if(RCS_DATA) setActiveRound(btn.dataset.round);
   });
 });
 
-document.getElementById('sortDetail').addEventListener('change', renderDetailCharts);
-['filterDiscipline','filterStatus','filterMilestone'].forEach(id=>{
+['filterStatus'].forEach(id=>{
   document.getElementById(id).addEventListener('change', renderTable);
 });
 document.getElementById('filterSearch').addEventListener('input', renderTable);
